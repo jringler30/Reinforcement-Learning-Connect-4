@@ -49,6 +49,20 @@ print(result['champion'])
 
 Returns a dict with `pool_standings`, `bracket_winners`, `semi_finals`, `final`, and `champion`.
 
+## Adding your Project 1 CNN for everyone to use
+
+Drop your Keras model into the `models/` folder with the name
+`<yourname>_cnn.h5` (e.g. `taylor_cnn.h5`). Then anyone can load it:
+
+```python
+from models.loader import load_agent, list_available
+
+print(list_available())           # ['josh_cnn', 'taylor_cnn', ...]
+agent = load_agent("taylor_cnn")  # returns a ready-to-use ModelAgent
+```
+
+See [`models/README.md`](models/README.md) for the I/O spec your model must match.
+
 ## Before you start
 
 Run `python test_smoke.py` to confirm the engine works on your machine.

@@ -14,6 +14,7 @@ class tournament.
 | `connect4_env.py` | 3 | Board logic, win detection, tactical helpers, neural-net encoding, unified `Agent` interface, game runner. No external deps beyond numpy. |
 | `tournament.py` | 3 | Match runner (alternates first player), round-robin pool, single-elim bracket, and full 32-team tournament simulator with standings + tiebreakers. |
 | `test_smoke.py` | 3 | Fast sanity checks for everything above. Run: `python test_smoke.py`. |
+| `models/` | — | Each teammate's Project 1 CNN, used as opponents during PG/DQN training and in the tournament. See [`models/README.md`](models/README.md) for the naming convention. |
 
 ## Part split
 
