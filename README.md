@@ -6,6 +6,8 @@ class tournament.
 
 > **Teammates: read [`TEAMMATE_GUIDE.md`](TEAMMATE_GUIDE.md) before integrating your model.**
 > It's 30 seconds and shows exactly how to wrap your trained network so it drops into the tournament system.
+>
+> Assignment spec: [`project3_overview.pdf`](project3_overview.pdf)
 
 ## Repo layout
 
