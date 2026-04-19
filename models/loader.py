@@ -5,7 +5,7 @@ Tiny helper so anywhere in the codebase can grab a teammate's model
 with one line, regardless of whether it was trained in Keras or PyTorch.
 
     from models.loader import load_agent
-    taylor = load_agent("taylor_cnn")      # auto-detects .h5 / .keras / .pt / .pth
+    agent = load_agent("name_cnn")         # auto-detects .h5 / .keras / .pt / .pth
 """
 
 from pathlib import Path

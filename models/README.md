@@ -14,8 +14,8 @@ supported — pick whichever framework you trained in.
 
 Examples:
 - `josh_cnn.h5`          ← Keras
-- `emily_cnn.pt`         ← PyTorch
-- `prisca_transformer.pt`
+- `name_cnn.pt`          ← PyTorch
+- `name_transformer.pt`
 
 Lowercase. Keep it short.
 
@@ -37,10 +37,10 @@ and masks illegal columns.
 
 ```python
 # ✅ Correct — saves the whole module so it can be loaded without arch code
-torch.save(model, "emily_cnn.pt")
+torch.save(model, "name_cnn.pt")
 
 # ❌ Wrong — saves only weights, can't load without the class definition
-torch.save(model.state_dict(), "emily_cnn.pt")
+torch.save(model.state_dict(), "name_cnn.pt")
 ```
 
 ## Loading any model
@@ -48,19 +48,19 @@ torch.save(model.state_dict(), "emily_cnn.pt")
 ```python
 from models.loader import load_agent, list_available
 
-print(list_available())           # ['josh_cnn', 'emily_cnn', ...]
+print(list_available())           # ['josh_cnn', 'name_cnn', ...]
 
-josh  = load_agent("josh_cnn")                     # Keras, auto-detected
-emily = load_agent("emily_cnn")                    # PyTorch, channels-first
+josh = load_agent("josh_cnn")                      # Keras, auto-detected
+other = load_agent("name_cnn")                     # PyTorch, channels-first
 # If your PyTorch model was trained with channels-last:
-other = load_agent("other_cnn", channels_first=False)
+other = load_agent("name_cnn", channels_first=False)
 ```
 
 Then use anywhere:
 
 ```python
 from connect4_env import evaluate_agents
-print(evaluate_agents(josh, emily, n_games=100))
+print(evaluate_agents(josh, other, n_games=100))
 ```
 
 ## Size note

@@ -54,20 +54,20 @@ Returns a dict with `pool_standings`, `bracket_winners`, `semi_finals`, `final`,
 Drop your model into `models/` with the name `<yourname>_<arch>.<ext>`.
 Both Keras and PyTorch are supported:
 
-- `taylor_cnn.h5`   ← Keras
-- `emily_cnn.pt`    ← PyTorch
+- `name_cnn.h5`   ← Keras
+- `name_cnn.pt`   ← PyTorch
 
 **PyTorch users:** save the full model, not just the state_dict:
 ```python
-torch.save(model, "emily_cnn.pt")   # ✅ works
+torch.save(model, "name_cnn.pt")    # ✅ works
 torch.save(model.state_dict(), ...) # ❌ won't load without the arch code
 ```
 
 Then anyone can load it:
 ```python
 from models.loader import load_agent, list_available
-print(list_available())            # ['josh_cnn', 'emily_cnn', ...]
-agent = load_agent("emily_cnn")    # auto-detects framework
+print(list_available())            # ['josh_cnn', 'name_cnn', ...]
+agent = load_agent("name_cnn")     # auto-detects framework
 ```
 
 See [`models/README.md`](models/README.md) for the full I/O spec, especially
