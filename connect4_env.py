@@ -292,20 +292,35 @@ def print_board(board):
     print()
 
 
-def evaluate_agents(agent1, agent2, n_games=100, random_init_moves=2):
+def evaluate_agents(agent1, agent2, n_games=100, random_init_moves=0,
+                    alternate_first=True):
     """
-    Play n_games between agent1 (player 1) and agent2 (player -1).
-    Returns dict with win/loss/draw counts and win rate for agent1.
+    Play n_games between agent1 and agent2. When alternate_first=True,
+    they take turns going first — this removes the first-move bias that
+    otherwise skews Connect-4 results heavily.
+
+    Returns dict with wins/losses/draws/win_rate for agent1.
     """
-    results = {1: 0, -1: 0, 0: 0}
-    for _ in range(n_games):
-        _, winner = play_game(agent1, agent2,
-                              random_init_moves=random_init_moves)
-        results[winner] += 1
-    total = n_games
+    wins = losses = draws = 0
+    for i in range(n_games):
+        swap = alternate_first and (i % 2 == 1)
+        if swap:
+            # agent2 plays as player 1 this game
+            _, winner = play_game(agent2, agent1,
+                                  random_init_moves=random_init_moves)
+            winner = -winner  # flip so +1 still means agent1 won
+        else:
+            _, winner = play_game(agent1, agent2,
+                                  random_init_moves=random_init_moves)
+        if winner == 1:
+            wins += 1
+        elif winner == -1:
+            losses += 1
+        else:
+            draws += 1
     return {
-        'wins':   results[1],
-        'losses': results[-1],
-        'draws':  results[0],
-        'win_rate': results[1] / total,
+        'wins':     wins,
+        'losses':   losses,
+        'draws':    draws,
+        'win_rate': wins / n_games,
     }
