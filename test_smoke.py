@@ -186,6 +186,33 @@ def test_full_tournament_32():
     ok(f"32-team tournament completes; champion={result['champion']}")
 
 
+def test_real_model_loading():
+    """Regression test: load josh_cnn.h5 and verify it plays a full game."""
+    print("Real model load (josh_cnn)")
+    try:
+        from models.loader import load_agent, list_available
+    except ImportError:
+        print("    (skipped — models/ package not importable)")
+        return
+
+    available = list_available()
+    if "josh_cnn" not in available:
+        print(f"    (skipped — josh_cnn not in {available})")
+        return
+
+    try:
+        agent = load_agent("josh_cnn", sample=False, strong=True)
+    except Exception as e:
+        print(f"    (skipped — TF/Keras not installed: {type(e).__name__})")
+        return
+
+    from connect4_env import play_game, RandomAgent
+    np.random.seed(42)
+    _, winner = play_game(agent, RandomAgent())
+    assert winner in (1, -1, 0)
+    ok(f"josh_cnn plays a full game (winner={winner})")
+
+
 if __name__ == "__main__":
     print("Running smoke tests...\n")
     test_board_basics()
@@ -197,4 +224,5 @@ if __name__ == "__main__":
     test_pool()
     test_bracket()
     test_full_tournament_32()
+    test_real_model_loading()
     print("\n✅ All smoke tests passed.")

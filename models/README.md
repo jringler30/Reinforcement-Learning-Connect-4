@@ -1,44 +1,69 @@
 # Shared Project 1 Models
 
-This folder holds each teammate's **Project 1 CNN** so we can use them as
-opponents (M2 candidates) during PG/DQN training and in the final tournament.
+This folder holds each teammate's **Project 1 model** so we can use them as
+opponents (M2 candidates) during PG/DQN training and in the tournament.
+
+Both **Keras** (`.h5`, `.keras`) and **PyTorch** (`.pt`, `.pth`) models are
+supported — pick whichever framework you trained in.
 
 ## Naming convention
 
 ```
-<firstname>_<arch>.h5
+<firstname>_<arch>.<ext>
 ```
 
 Examples:
-- `josh_cnn.h5` ✅
-- `taylor_cnn.h5`
-- `jordan_transformer.h5`
+- `josh_cnn.h5`          ← Keras
+- `emily_cnn.pt`         ← PyTorch
+- `prisca_transformer.pt`
 
 Lowercase. Keep it short.
 
-## What each file must be
+## Input / output contract
 
-- A **Keras** model (`.h5` or `.keras`)
-- Input shape: `(batch, 6, 7, 2)` — 2-channel board (yours / opponent)
-- Output shape: `(batch, 7)` — one score per column (softmax is fine)
+Your model must accept a batched 2-channel Connect-4 board and return one
+score per column.
 
-If your Project 1 model used different I/O, wrap it so it matches before saving here.
+|                | Input shape | Output shape |
+|---|---|---|
+| **Keras**      | `(batch, 6, 7, 2)` (channels-last) | `(batch, 7)` |
+| **PyTorch**    | `(batch, 2, 6, 7)` (channels-first, default) — or `(batch, 6, 7, 2)` if you set `channels_first=False` when loading | `(batch, 7)` |
 
-## Loading any model in your code
+Channel 0 = your pieces, channel 1 = opponent's.
+Output can be logits, softmax, or tanh — the wrapper treats it as logits
+and masks illegal columns.
+
+## PyTorch: save the FULL model, not just the state_dict
 
 ```python
-from models.loader import load_agent
+# ✅ Correct — saves the whole module so it can be loaded without arch code
+torch.save(model, "emily_cnn.pt")
 
-josh = load_agent("josh_cnn", sample=False, strong=True)
-taylor = load_agent("taylor_cnn", sample=False, strong=True)
+# ❌ Wrong — saves only weights, can't load without the class definition
+torch.save(model.state_dict(), "emily_cnn.pt")
+```
 
-# Use directly in any tournament / eval function:
+## Loading any model
+
+```python
+from models.loader import load_agent, list_available
+
+print(list_available())           # ['josh_cnn', 'emily_cnn', ...]
+
+josh  = load_agent("josh_cnn")                     # Keras, auto-detected
+emily = load_agent("emily_cnn")                    # PyTorch, channels-first
+# If your PyTorch model was trained with channels-last:
+other = load_agent("other_cnn", channels_first=False)
+```
+
+Then use anywhere:
+
+```python
 from connect4_env import evaluate_agents
-print(evaluate_agents(josh, taylor, n_games=100))
+print(evaluate_agents(josh, emily, n_games=100))
 ```
 
 ## Size note
 
-Keep models under ~25MB each. GitHub's soft limit is 50MB per file
-and the hard limit is 100MB. If your model is larger, consider Git LFS
-or just pruning.
+Keep models under ~25 MB each. GitHub's soft limit is 50 MB per file.
+If yours is larger, consider pruning before upload.

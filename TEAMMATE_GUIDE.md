@@ -49,19 +49,29 @@ print(result['champion'])
 
 Returns a dict with `pool_standings`, `bracket_winners`, `semi_finals`, `final`, and `champion`.
 
-## Adding your Project 1 CNN for everyone to use
+## Adding your Project 1 model for everyone to use
 
-Drop your Keras model into the `models/` folder with the name
-`<yourname>_cnn.h5` (e.g. `taylor_cnn.h5`). Then anyone can load it:
+Drop your model into `models/` with the name `<yourname>_<arch>.<ext>`.
+Both Keras and PyTorch are supported:
 
+- `taylor_cnn.h5`   ← Keras
+- `emily_cnn.pt`    ← PyTorch
+
+**PyTorch users:** save the full model, not just the state_dict:
 ```python
-from models.loader import load_agent, list_available
-
-print(list_available())           # ['josh_cnn', 'taylor_cnn', ...]
-agent = load_agent("taylor_cnn")  # returns a ready-to-use ModelAgent
+torch.save(model, "emily_cnn.pt")   # ✅ works
+torch.save(model.state_dict(), ...) # ❌ won't load without the arch code
 ```
 
-See [`models/README.md`](models/README.md) for the I/O spec your model must match.
+Then anyone can load it:
+```python
+from models.loader import load_agent, list_available
+print(list_available())            # ['josh_cnn', 'emily_cnn', ...]
+agent = load_agent("emily_cnn")    # auto-detects framework
+```
+
+See [`models/README.md`](models/README.md) for the full I/O spec, especially
+the channels-first vs channels-last note for PyTorch.
 
 ## Before you start
 

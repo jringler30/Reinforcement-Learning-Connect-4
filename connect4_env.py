@@ -181,19 +181,81 @@ class StrongRuleAgent(Agent):
         return np.random.choice(find_non_losing_moves(board, player))
 
 
+def _infer_framework(model):
+    """Detect whether `model` is a Keras or PyTorch model."""
+    cls = type(model).__module__
+    if cls.startswith("torch") or cls.startswith("__main__"):
+        try:
+            import torch
+            if isinstance(model, torch.nn.Module):
+                return "torch"
+        except ImportError:
+            pass
+    # default: assume Keras (it has .predict)
+    return "keras"
+
+
 class ModelAgent(Agent):
     """
-    Wraps a Keras/TF model that takes (batch, 6, 7, 2) and outputs
-    a (batch, 7) softmax distribution.
+    Wraps a trained policy/value network and exposes it as an Agent.
 
-    sample=True  → stochastic (used during PG training)
-    sample=False → argmax (used for evaluation / tournament)
-    strong=True  → still applies win/block rules on top of model
+    Supports BOTH Keras and PyTorch models:
+      • Keras  model:  expects input (batch, 6, 7, 2), returns (batch, 7)
+      • PyTorch model: expects input (batch, 2, 6, 7) by default
+                       (channels-first). If your PyTorch model was trained
+                       with channels-last, pass `channels_first=False`.
+
+    The model's output (7 scores per board) is treated as logits. They're
+    masked for illegal columns, then either sampled or argmaxed.
+
+    Parameters
+    ----------
+    model          : keras.Model | torch.nn.Module
+    sample         : True = stochastic (PG training), False = argmax (eval)
+    strong         : apply win/block rules on top of the model
+    channels_first : for PyTorch models only; default True matches the
+                     typical PyTorch convention (N, C, H, W)
+    framework      : "auto" (default), "keras", or "torch" — override if
+                     autodetection gets it wrong
     """
-    def __init__(self, model, sample=True, strong=False):
+    def __init__(self, model, sample=True, strong=False,
+                 channels_first=True, framework="auto"):
         self.model = model
         self.sample = sample
         self.strong = strong
+        self.channels_first = channels_first
+        self.framework = (_infer_framework(model)
+                          if framework == "auto" else framework)
+
+        if self.framework == "torch":
+            import torch
+            self._torch = torch
+            try:
+                self.model.eval()
+            except AttributeError:
+                pass
+
+    def _predict_logits(self, enc_hwc):
+        """
+        Run one forward pass and return the 7-dim score vector (numpy).
+        `enc_hwc` is shape (6, 7, 2), channels-last.
+        """
+        if self.framework == "keras":
+            x = enc_hwc[np.newaxis]                    # (1, 6, 7, 2)
+            return self.model.predict(x, verbose=0)[0] # (7,)
+
+        # PyTorch
+        torch = self._torch
+        if self.channels_first:
+            x = np.transpose(enc_hwc, (2, 0, 1))       # (2, 6, 7)
+        else:
+            x = enc_hwc
+        x = x[np.newaxis].astype(np.float32)           # add batch dim
+        with torch.no_grad():
+            out = self.model(torch.from_numpy(x))
+        if hasattr(out, "detach"):
+            out = out.detach().cpu().numpy()
+        return np.asarray(out).reshape(-1)[:7]         # flatten to (7,)
 
     def select_move(self, board, player):
         if self.strong:
@@ -205,8 +267,8 @@ class ModelAgent(Agent):
                 return col
 
         legal = legal_moves(board)
-        enc = encode_board(board, player)[np.newaxis]       # (1, 6, 7, 2)
-        logits = self.model.predict(enc, verbose=0)[0]      # (7,)
+        enc = encode_board(board, player)              # (6, 7, 2)
+        logits = self._predict_logits(enc)             # (7,)
 
         # mask illegal columns
         mask = np.full(7, -1e9)
@@ -214,10 +276,9 @@ class ModelAgent(Agent):
         logits = logits + mask
 
         if self.sample:
-            # re-normalise and sample
             probs = np.exp(logits - logits.max())
             probs /= probs.sum()
-            return np.random.choice(7, p=probs)
+            return int(np.random.choice(7, p=probs))
         else:
             return int(np.argmax(logits))
 
