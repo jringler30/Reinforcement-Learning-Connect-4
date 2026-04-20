@@ -1,6 +1,10 @@
 # =============================================================================
 # Part 1 — Policy Gradient (REINFORCE) Training
 # =============================================================================
+# Run from repo root: python part1_pg/train_local.py
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+# =============================================================================
 # Strategy:
 #   M1 = josh_cnn (our Project 1 CNN, the model being improved)
 #   M2 = randomly sampled from an evolving opponent pool
