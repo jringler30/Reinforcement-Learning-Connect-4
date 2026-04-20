@@ -4,16 +4,16 @@ These are snapshots of `josh_cnn` after being improved via REINFORCE
 (Policy Gradient) training. Each file is a full Keras model with the
 same architecture and I/O as the original `models/josh_cnn.h5`.
 
-## Training results so far
+## Training results
 
-| Checkpoint | Iterations | vs StrongRuleAgent | vs Original M1 |
-|---|---|---|---|
-| `m1_iter100.keras` | 100 | 83% | 98% |
-| `m1_iter200.keras` | 200 | 89% | 95% |
+| Checkpoint | Total Iters | vs StrongRuleAgent | vs Original M1 | Notes |
+|---|---|---|---|---|
+| `m1_iter100.keras` | 100 | 83% | 98% | Run 1, starting from josh_cnn |
+| `m1_iter200.keras` | 200 | 89% | 95% | Run 1 |
+| `m1_iter300.keras` | ~500 | 88% | 95% | Run 2, starting from iter200 |
+| `m1_pg_final.keras` | ~450 | 87% | 95% | Best available final model |
 
-Training is ongoing — more checkpoints will be added as they complete.
-The final model will be saved as `m1_pg_final.keras` when all 2000
-iterations finish.
+**Use `m1_pg_final.keras` for the tournament** — it has the most total training.
 
 ## What these models are
 
