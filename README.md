@@ -81,7 +81,8 @@ Reinforcement-Learning-Connect-4/
 | 1 — Policy Gradient | Josh | Done — see `part1_pg/` |
 | 2 — DQN | Prisca (original) + Emily (updated) | Done — see `part4_dqn/` |
 | 3 — Game Engine + Tournament | Josh | Done — `connect4_env.py` + `tournament.py` |
-| 4 — Evaluation + Report | All | Pending |
+| 4 — RL Comparison, Minimax & Final Selection | Emily | Done — see `part5_comparison/` |
+| 5 — Evaluation + Report | All | Pending |
 
 ---
 
