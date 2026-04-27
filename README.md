@@ -39,22 +39,24 @@ Reinforcement-Learning-Connect-4/
         ├── m1_iter200.keras   ← 89% vs Strong — best checkpoint
         ├── m1_iter300.keras
         └── TRAINING_HISTORY.md
-└── part4_dqn/                         ← DQN training (Step 4)
-    ├── part4_dqn_colab.ipynb          ← original Colab notebook
-    ├── part4_dqn_local.ipynb          ← original local notebook
-    ├── best_model/                    ← original training run
+└── part4_dqn/                             ← DQN training (Step 4)
+    ├── part4_dqn_colab.ipynb              ← original Colab notebook
+    ├── part4_dqn_local.ipynb              ← original local notebook
+    ├── best_model/                        ← original training run
     │   ├── dqn_best.keras
     │   ├── dqn_final.keras
     │   ├── dqn_training_curves.png
     │   └── dqn_vs_ddqn_comparison.png
-    └── updated_dqn/                   ← updated run with bug fixes + continuation
+    └── updated_dqn/                       ← updated run with bug fixes + continuation
         ├── part4_dqn_updated_colab.ipynb  ← fixed next_state bug, faster epsilon decay
         ├── dqn_best.keras                 ← run 1 best: 75% vs Strong (5000 episodes)
-        ├── dqn_best_cont.keras            ← continuation best
-        ├── dqn_training_curves.png        ← run 1 training curves
+        ├── dqn_best_cont.keras            ← continuation best: use for tournament
+        ├── dqn_training_curves.png        ← run 1 training curves (episodes 1-5000)
         ├── dqn_continuation_curves.png    ← continuation run (episodes 5001-8001)
-        ├── dqn_summary_bar.png            ← best vs final win rates
-        └── dqn_checkpoints/               ← all checkpoints from both runs
+        └── dqn_summary_bar.png            ← best vs final win rates across all opponents
+        
+        Note: episode checkpoints (dqn_ep*.keras) stored in Google Drive only
+        due to file size — available on request
 ```
 
 ---
