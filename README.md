@@ -28,17 +28,18 @@ Reinforcement-Learning-Connect-4/
 │   ├── loader.py            ← load_model("name") — auto-detects framework
 │   └── README.md            ← model I/O spec + naming convention
 │
-└── part1_pg/                ← Policy Gradient training (Steps 1–3)
-    ├── train_colab.ipynb    ← open in Colab to train on GPU
-    ├── train_local.py       ← run locally: python part1_pg/train_local.py
-    ├── COLAB_GUIDE.md       ← full guide for Colab training + Drive save
-    ├── best_model/
-    │   └── m1_pg_final.keras  ← best trained model (~450 iters, 87% vs Strong)
-    └── checkpoints/
-        ├── m1_iter100.keras
-        ├── m1_iter200.keras   ← 89% vs Strong — best checkpoint
-        ├── m1_iter300.keras
-        └── TRAINING_HISTORY.md
+├── part1_pg/                ← Policy Gradient training (Steps 1-3)
+│   ├── train_colab.ipynb    ← open in Colab to train on GPU
+│   ├── train_local.py       ← run locally: python part1_pg/train_local.py
+│   ├── COLAB_GUIDE.md       ← full guide for Colab training + Drive save
+│   ├── best_model/
+│   │   └── m1_pg_final.keras   ← best trained model (~450 iters, 87% vs Strong)
+│   └── checkpoints/
+│       ├── m1_iter100.keras
+│       ├── m1_iter200.keras    ← 89% vs Strong — best checkpoint
+│       ├── m1_iter300.keras
+│       └── TRAINING_HISTORY.md
+│
 └── part4_dqn/                             ← DQN training (Step 4)
     ├── part4_dqn_colab.ipynb              ← original Colab notebook
     ├── part4_dqn_local.ipynb              ← original local notebook
