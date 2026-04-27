@@ -16,48 +16,60 @@ and culminates in a class tournament.
 ```
 Reinforcement-Learning-Connect-4/
 │
-├── connect4_env.py          ← game engine (board logic, agents, evaluator)
-├── tournament.py            ← full 32-team tournament simulator
-├── test_smoke.py            ← sanity checks — run first after any change
-├── play_vs_bot.ipynb        ← play against the trained bot in Colab
+├── connect4_env.py              ← game engine (board logic, agents, evaluator)
+├── tournament.py                ← full tournament simulator
+├── test_smoke.py                ← sanity checks — run after changes
+├── play_vs_bot.ipynb           ← play against trained bot in Colab
 │
-├── models/                  ← all Project 1 baseline CNNs
-│   ├── josh_cnn.h5          ← Josh's model (Keras)
-│   ├── cnn_emily.pt         ← Emily's model (PyTorch)
-│   ├── cnn_prisca.pt        ← Prisca's model (PyTorch)
-│   ├── loader.py            ← load_model("name") — auto-detects framework
-│   └── README.md            ← model I/O spec + naming convention
+├── models/                     ← all Project 1 baseline + RL models
+│   ├── josh_cnn.h5             ← Josh Keras CNN
+│   ├── cnn_emily.pt            ← Emily PyTorch CNN
+│   ├── emily_cnn.pt            ← cleaned Emily version
+│   ├── cnn_prisca.pt           ← legacy Prisca model (old format)
+│   ├── connect4_cnn.pt         ← Prisca updated CNN (correct format)
+│   ├── connect4_transformer.pt ← Prisca Transformer model
+│   ├── abhay_cnn.keras         ← Abhay CNN model
+│   ├── loader.py               ← unified model loader
+│   ├── models.py               ← model definitions/helpers
+│   ├── __init__.py             ← package init
+│   └── README.md               ← model I/O + naming spec
 │
-├── part1_pg/                ← Policy Gradient training (Steps 1-3)
-│   ├── train_colab.ipynb    ← open in Colab to train on GPU
-│   ├── train_local.py       ← run locally: python part1_pg/train_local.py
-│   ├── COLAB_GUIDE.md       ← full guide for Colab training + Drive save
+├── part1_pg/                  ← Policy Gradient training
+│   ├── train_colab.ipynb      ← Colab GPU training
+│   ├── train_local.py         ← local training script
+│   ├── COLAB_GUIDE.md         ← Colab + Drive setup guide
 │   ├── best_model/
-│   │   └── m1_pg_final.keras   ← best trained model (~450 iters, 87% vs Strong)
+│   │   └── m1_pg_final.keras  ← final PG model (~87% vs Strong)
 │   └── checkpoints/
 │       ├── m1_iter100.keras
-│       ├── m1_iter200.keras    ← 89% vs Strong — best checkpoint
+│       ├── m1_iter200.keras   ← best checkpoint (~89% vs Strong)
 │       ├── m1_iter300.keras
 │       └── TRAINING_HISTORY.md
 │
-└── part4_dqn/                             ← DQN training (Step 4)
-    ├── part4_dqn_colab.ipynb              ← original Colab notebook
-    ├── part4_dqn_local.ipynb              ← original local notebook
-    ├── best_model/                        ← original training run
-    │   ├── dqn_best.keras
-    │   ├── dqn_final.keras
-    │   ├── dqn_training_curves.png
-    │   └── dqn_vs_ddqn_comparison.png
-    └── updated_dqn/                       ← updated run with bug fixes + continuation
-        ├── part4_dqn_updated_colab.ipynb  ← fixed next_state bug, faster epsilon decay
-        ├── dqn_best.keras                 ← run 1 best: 75% vs Strong (5000 episodes)
-        ├── dqn_best_cont.keras            ← continuation best: use for tournament
-        ├── dqn_training_curves.png        ← run 1 training curves (episodes 1-5000)
-        ├── dqn_continuation_curves.png    ← continuation run (episodes 5001-8001)
-        └── dqn_summary_bar.png            ← best vs final win rates across all opponents
-        
-        Note: episode checkpoints (dqn_ep*.keras) stored in Google Drive only
-        due to file size — available on request
+├── part4_dqn/                 ← DQN training
+│   ├── part4_dqn_colab.ipynb  ← original Colab notebook
+│   ├── part4_dqn_local.ipynb  ← local training version
+│   │
+│   ├── best_model/            ← original training run
+│   │   ├── dqn_best.keras
+│   │   ├── dqn_final.keras
+│   │   ├── dqn_training_curves.png
+│   │   └── dqn_vs_ddqn_comparison.png
+│   │
+│   └── updated_dqn/           ← improved run (bug fixes + continuation)
+│       ├── part4_dqn_updated_colab.ipynb ← fixed next_state bug, improved epsilon decay
+│       ├── dqn_best.keras
+│       ├── dqn_best_cont.keras ← final model used in tournament
+│       ├── dqn_training_curves.png
+│       ├── dqn_continuation_curves.png
+│       └── dqn_summary_bar.png
+│
+│       (episode checkpoints stored externally in Google Drive due to size limits)
+│
+└── part5_comparison/          ← final evaluation + model selection
+    ├── part5_comparison_and_minimax.ipynb ← full evaluation, minimax, selection metric
+    ├── full_comparison.png                 ← PG/DQN/MM vs baselines (Random/Strong/Josh)
+    └── pg_vs_dqn_comparison.png            ← RL-only + minimax comparison
 ```
 
 ---
